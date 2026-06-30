@@ -127,3 +127,46 @@ The model did not change. The harness changed.
 4. When comparing models, compare them in the same harness. Raw model comparisons tell you almost nothing about production performance.
 
 The harness effect generalizes: most agent performance problems are configuration problems. Context quality, tool selection, instruction precision, and guardrail design determine results more than raw model capability in the vast majority of practical applications.
+
+---
+
+## The Journey: Where to Start Based on Your Stage
+
+Not everyone enters this repo at the same point. Use this guide to find your starting position.
+
+### Stage 0: You are new to AI-assisted coding
+You write code manually. You occasionally paste things into ChatGPT for help. You haven't built anything with an LLM API yet.
+
+**Start here:**
+1. [00-overview/the-spectrum.md](the-spectrum.md) — understand the three tiers
+2. [01-context-engineering/context-types.md](../01-context-engineering/context-types.md) — understand why context is everything
+3. [02-sdlc-phases/](../02-sdlc-phases/) — see where AI fits into the work you already do
+4. **First milestone:** Ship one feature using a structured AI prompt with a rule file. No agents yet.
+
+### Stage 1: You vibe code but ship blind
+You use Cursor, Copilot, or Claude to build features fast. The code works in dev, breaks in weird ways in production. You don't have a systematic way to verify AI output quality.
+
+**Start here:**
+1. [05-checklists/vibe-coding-security-checklist.md](../05-checklists/vibe-coding-security-checklist.md) — secure what you already ship
+2. [04-skills-by-phase/testing/eval-writing.md](../04-skills-by-phase/testing/eval-writing.md) — add the first eval
+3. [03-factory-model/vibe-to-production.md](../03-factory-model/vibe-to-production.md) — harden the gap
+4. **First milestone:** Every AI feature you ship has at least schema tests and one constraint test.
+
+### Stage 2: You use agents but they're fragile
+You've built an agent or two. They work most of the time. When they fail, you don't know why and can't reproduce it reliably. You're not sure what to tune.
+
+**Start here:**
+1. [03-factory-model/](../03-factory-model/) — understand the factory model and developer modes
+2. [07-agent-tools/tool-definitions.md](../07-agent-tools/tool-definitions.md) — review your tool definitions
+3. [08-agent-skills/skill-architecture.md](../08-agent-skills/skill-architecture.md) — structure your skills properly
+4. [05-checklists/evaluation-framework.md](../05-checklists/evaluation-framework.md) — build an eval suite
+5. **First milestone:** Your agents have a full eval suite and you can reproduce past failures from logs.
+
+### Stage 3: You run production agentic systems
+You have agents in production handling real work. You want systematic quality improvement, multi-agent coordination, and self-evolution.
+
+**Start here:**
+1. [08-agent-skills/skill-composition.md](../08-agent-skills/skill-composition.md) — orchestration patterns
+2. [07-agent-tools/mcp-integration.md](../07-agent-tools/mcp-integration.md) — standardize your tool layer
+3. [03-factory-model/team-workflows.md](../03-factory-model/team-workflows.md) — scale team practices
+4. **First milestone:** At least one production skill is self-evolving: it logs its own performance, proposes updates, and tracks regression.

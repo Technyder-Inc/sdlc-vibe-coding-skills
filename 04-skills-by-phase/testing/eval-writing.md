@@ -184,6 +184,110 @@ Key fields:
 
 ---
 
+## LLM-as-Judge: Advanced Patterns
+
+### Multi-Dimensional Scoring with Weights
+
+Not all evaluation dimensions are equally important. Weight them:
+
+```python
+DIMENSION_WEIGHTS = {
+    "accuracy": 0.40,       # Most important
+    "completeness": 0.25,
+    "clarity": 0.20,
+    "brand_voice": 0.15
+}
+
+def compute_weighted_score(scores: dict) -> float:
+    return sum(
+        scores[dim] * weight
+        for dim, weight in DIMENSION_WEIGHTS.items()
+        if dim in scores
+    )
+```
+
+### Rubric Calibration with Anchor Examples
+
+A rubric without anchors is ambiguous. What does a score of 3 look like? Provide examples:
+
+```
+ACCURACY SCORING GUIDE:
+
+Score 5: The output contains no factual errors and accurately represents all key points from the source.
+         Example: "The company was founded in 2018 and has 200 employees across 12 locations."
+                  (source confirms all three facts)
+
+Score 3: The output is mostly accurate but contains one minor error or omission.
+         Example: "The company was founded in 2019" (off by one year)
+
+Score 1: The output contains a major factual error that would mislead the reader.
+         Example: "The company operates nationwide" when they are regional only.
+```
+
+Anchor examples dramatically improve judge consistency and reduce scoring variance.
+
+### Adversarial Judge
+
+For high-stakes evals, run two judge passes: one that tries to confirm the output is good, one that tries to find flaws. Average the scores.
+
+```python
+async def adversarial_judge(output: str, criteria: list[dict]) -> dict:
+    # Optimistic judge
+    optimistic_prompt = f"Evaluate this output charitably. Look for evidence it meets each criterion. Output is: {output}"
+    optimistic = await judge(output, criteria, stance="optimistic")
+
+    # Pessimistic judge
+    pessimistic_prompt = f"Evaluate this output critically. Look for ways it fails each criterion. Output is: {output}"
+    pessimistic = await judge(output, criteria, stance="pessimistic")
+
+    # Average scores
+    averaged = {
+        dim: (optimistic["scores"][dim] + pessimistic["scores"][dim]) / 2
+        for dim in optimistic["scores"]
+    }
+
+    return {
+        "scores": averaged,
+        "pass": all(s >= 3 for s in averaged.values()),
+        "optimistic_verdict": optimistic["pass"],
+        "pessimistic_verdict": pessimistic["pass"]
+    }
+```
+
+### Pairwise Comparison for Ranking
+
+When choosing between prompt versions or model upgrades, pairwise comparison is more reliable than absolute scoring.
+
+```python
+async def pairwise_tournament(inputs: list[dict], variants: list[str]) -> dict:
+    """
+    variants: list of variant names (e.g. ["prompt_v1", "prompt_v2", "prompt_v3"])
+    Returns ranking with win counts.
+    """
+    win_counts = {v: 0 for v in variants}
+
+    for input_case in inputs:
+        outputs = {}
+        for variant in variants:
+            outputs[variant] = await run_skill(variant, input_case["input"])
+
+        # Compare all pairs
+        for i, v_a in enumerate(variants):
+            for v_b in variants[i+1:]:
+                winner = await compare_outputs(
+                    input_case["input"],
+                    outputs[v_a], v_a,
+                    outputs[v_b], v_b
+                )
+                if winner != "tie":
+                    win_counts[winner] += 1
+
+    ranked = sorted(win_counts, key=win_counts.get, reverse=True)
+    return {"ranking": ranked, "win_counts": win_counts}
+```
+
+---
+
 ## Building an Eval Suite
 
 An eval suite is a collection of evals that covers your system's behavioral requirements. Approach:
@@ -197,3 +301,9 @@ An eval suite is a collection of evals that covers your system's behavioral requ
 **Track trends, not just pass/fail.** A system that scores 4.2 on average is better than one that scores 3.8. Track score distributions over time to catch gradual degradation.
 
 **Review failures personally.** When the eval suite catches a failure, read the actual output. The eval score tells you something is wrong; the output tells you what.
+
+---
+
+## Eval Suite Reference
+
+See [05-checklists/evaluation-framework.md](../../05-checklists/evaluation-framework.md) for the full end-to-end evaluation framework including regression detection and CI integration.

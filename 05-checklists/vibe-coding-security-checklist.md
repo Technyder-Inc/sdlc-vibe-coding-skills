@@ -75,6 +75,41 @@ Secret exposure occurs when API keys, tokens, passwords, or other credentials ap
 
 ---
 
+## 6. Agentic-Specific Checks
+
+Multi-agent and agentic architectures introduce additional attack surfaces beyond single-model applications.
+
+### Agent Identity and Trust
+- [ ] Each agent has a defined identity and scope. Agents do not share credentials.
+- [ ] Orchestrator agents cannot grant sub-agents permissions the orchestrator itself does not have.
+- [ ] Trust is never established based on the content of a message — only on the verified sender identity.
+- [ ] An agent cannot be prompted into claiming to be a different agent ("pretend you are the admin agent").
+
+### Cross-Agent Injection
+- [ ] Tool results passed between agents are treated as untrusted data, not instructions.
+- [ ] An agent that receives output from a web search, document fetch, or external API cannot have its behavior hijacked by content within those results.
+- [ ] System prompts are never dynamically constructed from external data sources.
+- [ ] Agent-to-agent messages pass through a validation layer before execution.
+
+### Tool Chain Abuse
+- [ ] The full chain of tool calls in a multi-step task has been reviewed for misuse paths.
+- [ ] No tool in the chain can be used as a relay to another tool with higher permissions.
+- [ ] Chained tool calls that result in external communications (email, webhook, message) require explicit human approval.
+
+### Memory and State Integrity
+- [ ] Agent memory stores (vector DB, state files, conversation history) are write-protected from untrusted agents.
+- [ ] Memory is scoped per user or per session. Cross-session memory bleed has been tested and is not possible.
+- [ ] Memory contents are not logged in plaintext. PII in memory is masked or encrypted at rest.
+
+### Audit and Rollback
+- [ ] Every agent action that modifies external state (writes, sends, deletes) is logged with timestamp, actor, and action.
+- [ ] The log is immutable — agents cannot modify or delete their own audit trail.
+- [ ] Rollback procedures exist for the most common unintended actions (sent email, written file, CRM update).
+
+**How to verify:** Trace a complete multi-agent workflow from user input to final output. Document every external action. Confirm each one is logged, authorized, and reversible where possible.
+
+---
+
 ## Do Not Ship With Open Checklist Items
 
 This checklist applies to all AI-assisted code, regardless of tier (vibe coding, structured, agentic).

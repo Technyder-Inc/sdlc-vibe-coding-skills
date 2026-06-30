@@ -1,0 +1,107 @@
+# AGENTS.md
+
+<!-- Replace all [PLACEHOLDER] values. Remove this comment before committing. -->
+<!-- Last updated: YYYY-MM-DD -->
+
+## Project Overview
+
+[One paragraph. What does this project do, who uses it, and what problem does it solve?]
+
+**Stack:** [e.g. Python 3.11, FastAPI, PostgreSQL, Redis, React 18, TypeScript]
+**Deployment:** [e.g. Docker on AWS ECS, Nginx reverse proxy, GitHub Actions CI/CD]
+**Repo layout:**
+```
+src/
+  api/          FastAPI route handlers
+  models/       SQLAlchemy ORM models
+  services/     Business logic (no direct DB access)
+  utils/        Shared helpers
+tests/
+  unit/
+  integration/
+frontend/       React app (separate build)
+scripts/        One-off scripts, migrations
+```
+
+---
+
+## Architecture Notes
+
+[Key architectural decisions the agent needs to know to avoid fighting the design.]
+
+- **Authentication:** JWT tokens, validated in middleware at `src/api/middleware/auth.py`. Never implement auth logic outside this file.
+- **Database access:** All DB queries go through the service layer. Never query the DB directly from route handlers.
+- **Error handling:** Use the custom `AppError` class in `src/utils/errors.py`. Do not raise raw exceptions in route handlers.
+- **Async:** This is a fully async codebase. Every function that touches I/O must be `async def`.
+
+---
+
+## Conventions
+
+**Code style:**
+- Python: Black formatter, 88 char line length, isort for imports
+- TypeScript: Prettier, 2-space indent, single quotes
+- No `any` types in TypeScript without a comment explaining why
+
+**Naming:**
+- Functions: `snake_case`
+- Classes: `PascalCase`
+- Constants: `UPPER_SNAKE_CASE`
+- Files: `kebab-case.ts` (frontend), `snake_case.py` (backend)
+
+**Testing:**
+- Every new service method needs a unit test
+- New API endpoints need integration tests
+- Test files mirror the source tree: `tests/unit/services/test_user_service.py`
+
+**Commits:**
+- Conventional commits format: `feat:`, `fix:`, `refactor:`, `test:`, `docs:`
+- One logical change per commit
+
+---
+
+## Rules
+
+**Do:**
+- Check existing patterns before implementing something new
+- Use the existing helper utilities in `src/utils/` before writing new ones
+- Add type hints to all Python functions
+- Run `make lint` and `make test` before completing any task
+
+**Do not:**
+- Modify database migration files that have already been applied (`migrations/versions/`)
+- Change authentication or authorization logic without explicitly flagging it for review
+- Add new dependencies without noting them (add to requirements.txt / package.json and flag in your response)
+- Hard-code credentials, API keys, or environment-specific values
+- Write to production databases directly (use the dev environment)
+
+**When uncertain:**
+- Ask before making changes to shared utilities or base classes
+- Flag any change that affects more than 3 files for review before proceeding
+- Do not guess at business logic requirements — ask
+
+---
+
+## Tool Access
+
+**Allowed:**
+- Read all files in this repository
+- Write to `src/`, `tests/`, `frontend/src/`
+- Run `make test`, `make lint`, `pytest`, `npm test`
+- Execute read-only database queries in the dev environment
+
+**Not allowed:**
+- Push to `main` branch directly
+- Modify CI/CD configuration without explicit instruction
+- Execute database migrations without confirmation
+- Access credentials files (`.env`, `secrets/`)
+
+---
+
+## Out of Scope
+
+The following are outside the scope of this agent unless explicitly instructed:
+- Infrastructure changes (Terraform, Docker Compose, Nginx config)
+- Third-party service configuration (AWS, Stripe, SendGrid)
+- Billing or payment logic
+- User data deletion or bulk data operations

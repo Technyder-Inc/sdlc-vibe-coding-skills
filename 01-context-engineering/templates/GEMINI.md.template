@@ -1,0 +1,121 @@
+# GEMINI.md
+
+<!-- Gemini CLI / Gemini Code Assist rule file. -->
+<!-- Loaded automatically from the project root. -->
+<!-- Last updated: YYYY-MM-DD -->
+
+## Project Identity
+
+**Project:** [Project name]
+**Purpose:** [One sentence]
+**Stack:** [Language, framework, database, key services]
+**Repository:** [GitHub URL or internal URL]
+
+---
+
+## Behavior Directives
+
+You are a professional software engineer working on this project. Follow the conventions below. If you are uncertain about a requirement, ask a clarifying question before implementing.
+
+**Default behavior:**
+- Prefer editing existing files over creating new ones.
+- Prefer the simplest solution that satisfies the requirement.
+- Match the style and patterns of the surrounding code.
+- Run tests after making changes and report results.
+
+**When to stop and ask:**
+- The change affects more than 5 files.
+- The change modifies authentication, authorization, or billing logic.
+- The requirement is ambiguous in a way that could lead to different implementations.
+- A dependency would need to be added.
+
+---
+
+## Project Structure
+
+```
+[paste your directory tree here]
+```
+
+**Key files:**
+- `[path]` — [what it does]
+- `[path]` — [what it does]
+- `[path]` — [what it does]
+
+---
+
+## Code Style
+
+**Language:** [e.g. Python 3.11+]
+
+**Formatting:**
+- [e.g. Black, 88 char lines]
+- [e.g. isort for import ordering]
+
+**Naming conventions:**
+- Variables and functions: [e.g. snake_case]
+- Classes: [e.g. PascalCase]
+- Constants: [e.g. UPPER_SNAKE_CASE]
+- Files: [e.g. snake_case.py]
+
+**Type hints:** Required on all function signatures.
+
+**Documentation:** Docstrings on all public functions using [Google / NumPy / reStructuredText] style.
+
+---
+
+## Testing
+
+**Framework:** [e.g. pytest]
+**Coverage target:** [e.g. 80% minimum]
+**Test location:** [e.g. tests/ directory, mirroring src/ layout]
+
+**Rules:**
+- Unit tests for all service layer functions.
+- Integration tests for all API endpoints.
+- No live external service calls in tests. Use mocks or fixtures.
+
+**Commands:**
+```bash
+pytest                     # Run all tests
+pytest tests/unit/         # Unit tests only
+pytest -k "test_name"      # Run specific test
+pytest --cov=src --cov-report=html  # With coverage report
+```
+
+---
+
+## Architecture Notes
+
+[Fill in key architectural decisions that affect how code should be written.]
+
+- **[Pattern name]:** [Description and where it applies]
+- **[Pattern name]:** [Description and where it applies]
+- **[Pattern name]:** [Description and where it applies]
+
+---
+
+## Guardrails
+
+**Never:**
+- Hard-code credentials, tokens, or environment-specific URLs.
+- Modify completed database migrations.
+- Write to production databases during development.
+- Bypass authentication or authorization checks.
+- Suppress errors silently (no bare `except: pass`).
+
+**Always:**
+- Use the logging module, not print statements.
+- Validate inputs at API boundaries.
+- Handle the unhappy path (errors, empty results, unexpected types).
+- Add the new dependency to requirements.txt if you install something.
+
+---
+
+## Out of Scope
+
+Do not make changes to the following without explicit instruction:
+- CI/CD pipeline configuration
+- Infrastructure files (Dockerfile, docker-compose.yml, Terraform)
+- Database schema migrations
+- Third-party service credentials or configuration

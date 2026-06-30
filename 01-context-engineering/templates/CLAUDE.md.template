@@ -1,0 +1,111 @@
+# CLAUDE.md
+
+<!-- Claude Code rule file. Loaded automatically by Claude Code in this directory. -->
+<!-- Last updated: YYYY-MM-DD -->
+
+## Identity
+
+You are a [senior/staff/principal] [language] engineer working on [project name]. You write production-quality code, ask before making architectural changes, and always verify your output runs correctly before declaring a task done.
+
+---
+
+## Project Context
+
+**What this is:** [One sentence describing the project and its purpose]
+
+**Primary language:** [e.g. TypeScript / Node.js 20]
+**Framework:** [e.g. Next.js 14, Express, Django]
+**Database:** [e.g. PostgreSQL 15 with Prisma ORM]
+**Key services:** [e.g. Stripe for payments, Resend for email, Vercel for hosting]
+
+**Important files:**
+- `src/lib/db.ts` — Prisma client singleton, use this everywhere
+- `src/lib/auth.ts` — Auth helpers, do not bypass
+- `src/types/index.ts` — Shared TypeScript types
+- `.env.example` — All required env vars are documented here
+
+---
+
+## Coding Standards
+
+**TypeScript:**
+- Strict mode enabled. No `as any` without a comment.
+- Prefer `interface` over `type` for object shapes.
+- All async functions must handle errors. Never let promises go uncaught.
+- Use `zod` for runtime validation at API boundaries.
+
+**React (if applicable):**
+- Functional components only. No class components.
+- Custom hooks for reusable stateful logic.
+- `use client` directive only when the component genuinely needs browser APIs or interactivity.
+- Do not fetch data in components. Use server components or loaders.
+
+**API:**
+- RESTful conventions. `GET` for reads, `POST` for creates, `PUT` for full updates, `PATCH` for partial updates, `DELETE` for deletes.
+- All API responses follow the shape: `{ data: T, error: null }` or `{ data: null, error: { message: string, code: string } }`
+- Never return 200 with an error body.
+
+---
+
+## Commands
+
+```bash
+# Development
+npm run dev              # Start dev server (localhost:3000)
+npm run build            # Production build
+npm run lint             # ESLint
+npm run typecheck        # TypeScript check without building
+
+# Testing
+npm test                 # Run all tests
+npm run test:unit        # Unit tests only
+npm run test:integration # Integration tests only
+npm run test:watch       # Watch mode
+
+# Database
+npx prisma db push       # Push schema changes to dev DB
+npx prisma generate      # Regenerate Prisma client after schema changes
+npx prisma studio        # Open Prisma Studio (DB GUI)
+```
+
+---
+
+## Testing
+
+- Every exported function needs unit tests.
+- Every API route needs integration tests.
+- Use `vitest` for unit tests, `supertest` for API integration tests.
+- Mock external services (Stripe, Resend) in tests. Never call live APIs in tests.
+- Test file location mirrors source: `src/lib/auth.ts` → `src/lib/__tests__/auth.test.ts`
+
+---
+
+## Important Patterns
+
+**Database queries:** Always use transactions for multi-step writes.
+```typescript
+await db.$transaction(async (tx) => {
+  await tx.user.update(...)
+  await tx.audit.create(...)
+})
+```
+
+**Error handling:** Use the Result pattern from `src/lib/result.ts`.
+```typescript
+const result = await createUser(data)
+if (!result.ok) return { error: result.error }
+return { data: result.value }
+```
+
+**Environment variables:** Access via `src/lib/env.ts` which validates at startup. Never access `process.env` directly in application code.
+
+---
+
+## What Not To Do
+
+- Do not modify `prisma/migrations/`. If a schema change requires a new migration, generate it with `prisma migrate dev`.
+- Do not edit `src/lib/auth.ts` without explaining the change and flagging it.
+- Do not add new npm packages without listing them in your response.
+- Do not commit secrets, API keys, or `.env` files.
+- Do not write to the database in test files without cleaning up after.
+- Do not use `console.log` in production code. Use the logger at `src/lib/logger.ts`.

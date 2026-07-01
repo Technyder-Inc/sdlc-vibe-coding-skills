@@ -1,6 +1,6 @@
 # SDLC Vibe Coding Skills
 
-A practical reference for the new AI-assisted software development lifecycle, based on Google's Kaggle course **"The New SDLC With Vibe Coding"** by Addy Osmani, Shubham Saboo and Sokratis Kartakis (2026). Updated to v2 with expanded coverage of agent tools, skill architecture, and production deployment patterns.
+A practical reference for the new AI-assisted software development lifecycle, based on Google's Kaggle course **"The New SDLC With Vibe Coding"** by Addy Osmani, Shubham Saboo and Sokratis Kartakis (2026). Updated to v3 with expanded coverage of agent tools, skill architecture, production deployment patterns, and loop engineering.
 
 ## What This Is
 
@@ -9,16 +9,17 @@ This repo is a curated collection of skills, guides, templates, and checklists f
 ## The Core Spectrum
 
 ```
-Vibe Coding → Structured AI-Assisted Coding → Agentic Engineering
+Vibe Coding → Structured AI-Assisted Coding → Agentic Engineering → Loop Engineering
 ```
 
-The differentiator is not whether you use AI. Almost everyone does. It is how much structure, verification, and human judgment surround the output.
+The differentiator is not whether you use AI. Almost everyone does. It is how much structure, verification, and human judgment surround the output — and how much of that runs without you.
 
 | Tier | Description | Best For |
 |------|-------------|----------|
 | **Vibe Coding** | Casual prompts, accept output, paste errors back | Prototypes, scripts, hackathons, throwaway code |
 | **Structured AI-Assisted** | Detailed prompts with constraints, manual review of critical paths | Features inside an established codebase |
 | **Agentic Engineering** | Formal specs, memory files, automated evals, CI/CD gates, LLM judges | Production systems at team scale |
+| **Loop Engineering** | Autonomous loops that dispatch agents, verify output, and self-correct on a schedule | Recurring, well-defined work that runs without human prompting |
 
 ## Repo Structure
 
@@ -28,13 +29,14 @@ The differentiator is not whether you use AI. Almost everyone does. It is how mu
 02-sdlc-phases/           AI's role in each phase of the lifecycle
 03-factory-model/         Factory model, agent harness, vibe-to-production, team workflows
 04-skills-by-phase/       Practical skill guides per phase (incl. LLM-as-judge evals)
-05-checklists/            Security (incl. agent-specific), evaluation framework
+05-checklists/            Security (incl. agent-specific), evaluation framework, loop checklist
 06-templates/             Spec, ADR, eval, and rule file templates
 07-agent-tools/           Tool definitions, MCP integration, interoperability, selection patterns
 08-agent-skills/          Skill architecture, composition, built-in vs custom, testing
+09-loop-engineering/      Loop engineering — six primitives, maker-checker, durable state, loop risks
 ```
 
-## 5-Module Course Map
+## 6-Module Course Map
 
 | Module | Content |
 |--------|---------|
@@ -43,6 +45,7 @@ The differentiator is not whether you use AI. Almost everyone does. It is how mu
 | **Module 3: Agent Skills** | Skill architecture, composition patterns, built-in vs custom, testing |
 | **Module 4: Evaluation** | Eval types, LLM-as-judge, golden sets, regression detection, CI integration |
 | **Module 5: Production** | Vibe-to-production hardening, team workflows, developer modes |
+| **Module 6: Loop Engineering** | Six primitives, maker-checker pattern, durable state, loop risks, safe loop design |
 
 ## How to Use
 
@@ -56,10 +59,12 @@ The differentiator is not whether you use AI. Almost everyone does. It is how mu
 - Taking vibe code to production? See [03-factory-model/vibe-to-production.md](03-factory-model/vibe-to-production.md)
 - Shipping AI-generated code? Run through [05-checklists/vibe-coding-security-checklist.md](05-checklists/vibe-coding-security-checklist.md)
 - Need a spec or ADR template? Grab from [06-templates/](06-templates/)
+- Building a loop? Start at [09-loop-engineering/](09-loop-engineering/README.md)
+- Deploying a loop to production? Run through [05-checklists/loop-engineering-checklist.md](05-checklists/loop-engineering-checklist.md)
 
 ## Source
 
-Based on: **The New SDLC With Vibe Coding** — Google Kaggle Course, Addy Osmani, Shubham Saboo, Sokratis Kartakis, 2026. v2 expansion by Technyder Inc.
+Based on: **The New SDLC With Vibe Coding** — Google Kaggle Course, Addy Osmani, Shubham Saboo, Sokratis Kartakis, 2026. Module 6 (Loop Engineering) based on Addy Osmani's "Loop Engineering" post, addyosmani.com, June 7, 2026. v3 expansion by Technyder Inc.
 
 ## License
 

@@ -110,6 +110,36 @@ The developer who understands the factory model invests in making these interven
 
 ---
 
+---
+
+## The Runtime Layer: Loop Engineering
+
+The factory model describes the architecture. A factory does not run itself.
+
+Loop engineering is the layer that makes the factory run autonomously: automations that fire on a schedule, dispatch work, and route results back without requiring a human to start each turn.
+
+The relationship is direct:
+
+| Factory Component | Loop Engineering Equivalent |
+|---|---|
+| Specs | Task backlog in durable state |
+| Agents | Maker agents dispatched by automation |
+| Tests and evals | Checker agents running maker-checker per task |
+| Feedback loops | Retry logic routing checker failures back to maker |
+| Guardrails | Exit conditions, token budgets, escalation gates |
+
+The factory model gets you reliable output with a human starting each run. Loop engineering removes the human from the routine work. The human remains for exceptions: escalated tasks, ambiguous specs, high-stakes changes.
+
+**The right progression:**
+1. Build the factory. Validate it works with humans in the loop.
+2. Identify which task types the factory handles reliably and repeatably.
+3. Apply loop engineering to those task types only.
+4. Expand scope as confidence grows.
+
+See [09-loop-engineering/](../09-loop-engineering/README.md) for the full loop engineering guide.
+
+---
+
 ## Files in This Section
 
 - [agent-harness.md](agent-harness.md) — Agent harness components, the harness effect, diagnostic order

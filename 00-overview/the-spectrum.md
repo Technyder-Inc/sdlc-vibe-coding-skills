@@ -1,18 +1,18 @@
 # The AI-Assisted Development Spectrum
 
-## Three Tiers, One Spectrum
+## Four Tiers, One Spectrum
 
-AI-assisted development is not binary. There is no clear line between "using AI" and "not using AI." Instead, there is a spectrum with three broadly recognizable zones.
+AI-assisted development is not binary. There is no clear line between "using AI" and "not using AI." Instead, there is a spectrum with four broadly recognizable zones.
 
 ```
-Vibe Coding ──────────── Structured AI-Assisted ──────────── Agentic Engineering
-    |                              |                                   |
- Low rigor                  Medium rigor                         High rigor
- High speed                  Balanced                           Slower setup
- High risk                  Managed risk                         Low risk
+Vibe Coding ── Structured AI-Assisted ── Agentic Engineering ── Loop Engineering
+    |                    |                        |                      |
+ Low rigor          Medium rigor             High rigor            Autonomous
+ High speed          Balanced               Slower setup          Self-running
+ High risk          Managed risk             Low risk             Human on exceptions
 ```
 
-The differentiator is not whether you use AI. It is **how much structure, verification, and human judgment surround the output.**
+The differentiator is not whether you use AI. It is **how much structure, verification, and human judgment surround the output — and how much of that runs without you.**
 
 ---
 
@@ -107,7 +107,7 @@ The question is not "which tier is best?" The question is "which tier matches th
 | Production system, multiple contributors | Agentic Engineering |
 | Regulated domain (finance, health, legal) | Agentic Engineering + formal review |
 
-Most experienced developers operate across all three tiers simultaneously: vibe coding for exploration, structured AI-assisted for implementation, agentic engineering for the parts that need to run reliably at scale.
+Most experienced developers operate across all four tiers simultaneously: vibe coding for exploration, structured AI-assisted for implementation, agentic engineering for the parts that need to run reliably at scale, and loop engineering for recurring work that the system can handle without human prompting.
 
 ---
 
@@ -118,6 +118,7 @@ The characteristic that most separates the tiers is not how sophisticated the pr
 - **Vibe Coding:** Verification is manual and informal. You run it. If it works, you ship it.
 - **Structured AI-Assisted:** Verification is manual but systematic. You review against explicit criteria, run tests, and sign off before merging.
 - **Agentic Engineering:** Verification is automated and layered. Evals run on every output. LLM judges score trajectory. CI gates block anything that does not pass.
+- **Loop Engineering:** Verification is automated and continuous. The maker-checker pattern runs on every loop iteration. Human review is reserved for escalations the loop cannot resolve.
 
 Sophistication of verification determines where you fall on the spectrum. You can write beautifully crafted prompts and still be vibe coding if the output goes unverified. You can use simple prompts and be doing agentic engineering if the output runs through rigorous automated checks.
 
@@ -137,3 +138,13 @@ Moving from Structured AI-Assisted to Agentic Engineering:
 3. Add LLM-as-judge to your CI pipeline
 4. Invest in harness design: instruction files, tool access, guardrails
 5. Shift your output from code to the system that produces code
+
+Moving from Agentic Engineering to Loop Engineering:
+1. Identify recurring, well-defined tasks the factory handles reliably
+2. Build durable state tracking so agents know what has run and what has not
+3. Add automations that fire on a schedule and dispatch work without human prompting
+4. Implement the maker-checker pattern so the loop self-verifies before merging
+5. Define explicit exit conditions: retry limits, token budgets, time limits, escalation paths
+6. Start narrow: one task type, fully working, before expanding loop scope
+
+See [09-loop-engineering/](../09-loop-engineering/README.md) for the full guide.
